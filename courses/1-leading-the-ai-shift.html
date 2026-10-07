@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1: Leading the AI Shift | Harbourline Leadership Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600&family=Onest:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F6FB; --surface:#FFFFFF; --navy:#0E1F3D; --ink:#16233F; --muted:#5B6782; --line:#DCE2EE;
+  --blue:#2F6BFF; --blue-soft:#E4ECFF; --buoy:#FFC93C; --buoy-soft:#FFF4D6;
+  --glass:#7FD6C2; --glass-soft:#E1F6F0; --red:#E2574C; --red-soft:#FDE6E3;
+  --display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --body:"Onest","Segoe UI",system-ui,sans-serif;
+  --r-lg:22px; --r-md:14px; --r-sm:10px;
+  --lift:0 14px 34px -16px rgba(14,31,61,.35);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.shell{max-width:820px;margin:0 auto;padding:18px 20px 28px}
+h1,h2,h3{font-family:var(--display);font-weight:600;line-height:1.12;margin:0 0 14px;letter-spacing:-.02em;color:var(--navy)}
+h1{font-size:clamp(1.9rem,5.4vw,2.7rem)}
+h2{font-size:clamp(1.25rem,3.4vw,1.6rem)}
+h3{font-size:1rem}
+p{margin:0 0 14px;max-width:60ch}
+.lede{font-size:1.08rem}
+.muted{color:var(--muted)}
+.hidden{display:none!important}
+button{font:inherit}
+
+/* top bar */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:16px;margin-bottom:26px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;color:var(--navy)}
+.brand svg{width:34px;height:34px;flex:none}
+.brand b{font-family:var(--display);font-weight:600;font-size:1rem;letter-spacing:-.01em;display:block;line-height:1.1}
+.brand small{color:var(--muted);font-size:.8rem}
+.prog{font-size:.82rem;font-weight:600;color:var(--navy);background:var(--buoy);padding:5px 12px;border-radius:999px;white-space:nowrap}
+
+/* tags */
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.tag{font-size:.82rem;font-weight:600;padding:4px 12px;border-radius:999px;background:var(--surface);color:var(--muted);border:1px solid var(--line)}
+.tag.lead{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center}
+.hero-visual{position:relative}
+@media (max-width:680px){.hero{grid-template-columns:1fr}.hero-visual{order:-1}}
+
+/* buttons */
+.btn{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;gap:10px;background:var(--blue);color:#fff;font-weight:700;padding:14px 24px;border-radius:999px;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-2px);box-shadow:var(--lift)}
+.btn:focus-visible{outline:3px solid var(--buoy);outline-offset:3px}
+.btn.alt{background:var(--buoy);color:var(--navy)}
+.btn.ghost{background:transparent;color:var(--navy);box-shadow:inset 0 0 0 2px var(--navy)}
+.btn[disabled]{opacity:.4;cursor:default;transform:none;box-shadow:none}
+.kbd{font-size:.75rem;opacity:.75;font-weight:600}
+
+/* step heading */
+.step-label{font-size:.85rem;font-weight:700;color:var(--blue);margin-bottom:6px}
+
+/* options */
+.options{display:grid;gap:12px;margin-top:18px}
+.opt{all:unset;box-sizing:border-box;display:grid;grid-template-columns:36px 1fr;gap:14px;align-items:start;background:var(--surface);border:2px solid var(--line);border-radius:var(--r-md);padding:14px 16px;cursor:pointer;transition:transform .15s,border-color .15s,box-shadow .15s}
+.opt:hover:not([disabled]){transform:translateY(-2px);border-color:var(--blue);box-shadow:var(--lift)}
+.opt:focus-visible{outline:3px solid var(--buoy);outline-offset:2px}
+.opt .key{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--blue-soft);color:var(--blue);font-family:var(--display);font-weight:600;font-size:.9rem}
+.opt[disabled]{cursor:default;opacity:.4}
+.opt.picked{opacity:1;background:var(--blue);border-color:var(--blue);color:#fff}
+.opt.picked .key{background:rgba(255,255,255,.18);color:#fff}
+
+/* feedback panel */
+.feedback{margin-top:18px;background:var(--navy);color:#E9EEF8;border-radius:var(--r-lg);padding:20px 22px;animation:rise .35s ease}
+.feedback p{color:#E9EEF8}
+.feedback h3{color:#fff;margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.chip{font-size:.82rem;font-weight:700;padding:4px 12px;border-radius:999px;background:rgba(255,255,255,.1)}
+.chip.up{background:var(--glass);color:var(--navy)}
+.chip.down{background:var(--red);color:#fff}
+
+/* live HUD */
+.hud{display:grid;grid-template-columns:repeat(var(--n,3),1fr);gap:14px;background:var(--surface);border-radius:var(--r-md);padding:14px 16px;margin-bottom:22px;border:1px solid var(--line)}
+.mini label{display:flex;justify-content:space-between;font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:6px}
+.mini .val{color:var(--navy);font-variant-numeric:tabular-nums}
+.track{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.track i{display:block;height:100%;width:50%;border-radius:99px;background:var(--blue);transition:width .7s cubic-bezier(.2,.8,.2,1),background .3s}
+.mini.pulse .track i{background:var(--buoy)}
+@media (max-width:520px){.hud{gap:10px;padding:12px}.mini label{font-size:.72rem}}
+
+/* steps rail */
+.rail{display:flex;gap:6px;margin-bottom:18px}
+.rail span{flex:1;height:6px;border-radius:3px;background:var(--line);transition:background .3s}
+.rail span.on{background:var(--blue)}
+
+/* results */
+.result-head{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center;margin-bottom:18px}
+.badge{width:96px;height:96px;border-radius:28px;background:var(--navy);display:grid;place-items:center;animation:pop .6s cubic-bezier(.2,1.4,.4,1) both}
+.badge svg{width:56px;height:56px}
+.badge-big{font-family:var(--display);font-weight:600;color:var(--buoy);font-size:1.6rem}
+.result-kicker{font-weight:700;color:var(--blue);font-size:.9rem;margin-bottom:4px}
+.meters{display:grid;gap:16px;margin:8px 0 22px;background:var(--surface);border-radius:var(--r-lg);padding:20px 22px}
+.meter label{display:flex;justify-content:space-between;gap:12px;font-weight:600;font-size:.95rem;margin-bottom:6px}
+.meter .track{height:12px}
+.meter .track i{width:0}
+.panel{background:var(--surface);border-radius:var(--r-lg);padding:20px 22px;margin:0 0 20px}
+.panel ol{margin:6px 0 0;padding-left:22px}
+.panel li{margin-bottom:8px}
+.panel li::marker{font-family:var(--display);color:var(--blue);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:12px}
+
+/* footer */
+.foot{margin-top:30px;padding-top:14px;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.6) rotate(-8deg)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* ===== course intro + briefing ===== */
+.topright{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+.subtitle{font-size:1.08rem;color:var(--muted);font-weight:600;margin:-4px 0 16px}
+.briefing{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin-top:30px}
+.briefing .panel{margin:0}
+.howto ol{list-style:none;padding:0;margin:10px 0 12px}
+.howto li{display:grid;grid-template-columns:30px 1fr;gap:10px;margin-bottom:10px;counter-increment:s}
+.howto ol{counter-reset:s}
+.howto li::before{content:counter(s);width:28px;height:28px;border-radius:50%;background:var(--blue-soft);color:var(--blue);font-family:var(--display);font-weight:600;font-size:.78rem;display:grid;place-items:center}
+.tip{background:var(--buoy-soft);border-radius:var(--r-sm);padding:10px 14px;font-size:.92rem;margin:0}
+.ranks{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 4px}
+.ranks span{font-size:.76rem;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--blue-soft);color:var(--blue)}
+.startrow{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:22px}
+@media (max-width:680px){.briefing{grid-template-columns:1fr}}
+
+/* ===== gamification ===== */
+.xp-pill{display:inline-flex;align-items:center;gap:6px;background:var(--navy);color:#fff;font-weight:700;font-size:.82rem;padding:5px 12px;border-radius:999px;font-variant-numeric:tabular-nums;transition:transform .2s}
+.xp-pill.bump{transform:scale(1.15)}
+.xpfloat{position:absolute;z-index:50;font-weight:800;font-size:.9rem;color:var(--blue);background:#fff;border-radius:999px;padding:3px 12px;box-shadow:var(--lift);pointer-events:none;animation:floatup 1.2s ease forwards;white-space:nowrap}
+@keyframes floatup{0%{opacity:0;transform:translateY(0)}15%{opacity:1}100%{opacity:0;transform:translateY(-54px)}}
+.chip.xp{background:var(--buoy);color:var(--navy)}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin:12px 0 4px}
+.bdg{display:flex;gap:10px;align-items:center;background:var(--bg);border-radius:var(--r-md);padding:10px}
+.bdg .ic{width:42px;height:42px;border-radius:12px;background:var(--buoy);display:grid;place-items:center;font-size:1.3rem;flex:none}
+.bdg b{display:block;font-size:.88rem;color:var(--navy);line-height:1.2}
+.bdg small{display:block;font-size:.76rem;color:var(--muted);line-height:1.3}
+.bdg.locked .ic{background:var(--line);filter:grayscale(1);opacity:.55}
+.bdg.locked b{color:var(--muted)}
+.bdg.new{background:var(--buoy-soft);box-shadow:inset 0 0 0 2px var(--buoy)}
+.unlock{display:flex;gap:12px;align-items:center;background:var(--buoy);color:var(--navy);border-radius:16px;padding:8px 16px 8px 8px;margin:0 0 12px;width:fit-content;max-width:100%;animation:pop .55s cubic-bezier(.2,1.4,.4,1) both}
+.unlock .ic{width:40px;height:40px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:1.25rem;flex:none}
+.unlock small{display:block;font-size:.75rem;font-weight:700;opacity:.75}
+.unlock b{font-size:.95rem}
+.game{background:var(--surface);border-radius:var(--r-lg);padding:20px 22px;margin:0 0 20px}
+.game h3{margin-top:18px}
+.game-top{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:center;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.xpbig{font-family:var(--display);font-weight:600;font-size:2.6rem;color:var(--blue);line-height:1}
+.rankname{font-family:var(--display);font-weight:600;color:var(--navy);font-size:1.25rem;margin-bottom:8px}
+.game-top .track{height:10px}
+.game-top .track i{width:0;background:var(--buoy)}
+.game-top small{display:block;margin-top:6px;color:var(--muted);font-size:.85rem}
+.passport{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0 8px}
+.stamp{border:2px dashed var(--line);border-radius:var(--r-md);padding:10px;font-size:.8rem;color:var(--muted);line-height:1.3}
+.stamp b{display:block;font-family:var(--display);font-weight:600;font-size:.8rem;margin-bottom:3px}
+.stamp.done{border-style:solid;border-color:var(--glass);background:var(--glass-soft);color:var(--navy)}
+.stamp.here{border-style:solid;border-color:var(--blue);background:var(--blue-soft);color:var(--navy)}
+.note{font-size:.8rem;color:var(--muted)}
+#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:70}
+@media (max-width:520px){.passport{grid-template-columns:repeat(2,1fr)}.game-top{grid-template-columns:1fr;gap:12px}}
+
+/* ===== v3: modern, immersive layer ===== */
+.hero-band{position:relative;overflow:hidden;background:var(--navy);color:#D5DDEC;border-radius:28px;padding:34px 32px 84px;isolation:isolate}
+.hero-band h1{color:#fff;font-size:clamp(2.1rem,6.2vw,3.4rem);letter-spacing:-.03em}
+.hero-band .subtitle{color:var(--glass)}
+.hero-band .lede{color:#D5DDEC}
+.hero-band .lede strong{color:var(--buoy)}
+.hero-band .tag{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.16);color:#D5DDEC}
+.hero-band .tag.lead{background:var(--buoy);border-color:var(--buoy);color:var(--navy)}
+.glow{position:absolute;z-index:-1;border-radius:50%;filter:blur(70px);pointer-events:none}
+.glow.a{width:260px;height:260px;background:var(--buoy);opacity:.16;top:-90px;right:-60px}
+.glow.b{width:300px;height:300px;background:var(--blue);opacity:.28;bottom:-160px;left:-80px}
+.waves{position:absolute;left:0;bottom:-2px;width:115%;height:78px;z-index:-1;pointer-events:none}
+.waves path{animation:drift 10s ease-in-out infinite alternate}
+.waves path:nth-child(2){animation-duration:13s;animation-direction:alternate-reverse}
+@keyframes drift{to{transform:translateX(-7%)}}
+@media (max-width:680px){.hero-band{padding:24px 20px 76px;border-radius:22px}}
+.startrow .btn{padding:16px 30px;font-size:1.05rem;position:relative}
+.startrow .btn::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 0 rgba(47,107,255,.5);animation:ping 2.2s ease-out 1s 3}
+@keyframes ping{to{box-shadow:0 0 0 16px rgba(47,107,255,0)}}
+.briefing .panel{box-shadow:0 1px 0 var(--line)}
+.briefing h3{display:flex;align-items:center;gap:10px}
+.briefing h3 .hi{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font-size:1rem;background:var(--blue-soft)}
+
+/* screen transitions */
+#stage:not(.hidden),#play:not(.hidden),#end:not(.hidden){animation:screenIn .55s cubic-bezier(.2,.8,.2,1)}
+@keyframes screenIn{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
+
+/* sticky glass scoreboard */
+.hud{position:sticky;top:8px;z-index:20;background:rgba(14,31,61,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:0;box-shadow:var(--lift);border-radius:18px}
+.hud .mini label{color:#AFC0DA}
+.hud .mini .val{color:#fff}
+.hud .track{background:rgba(255,255,255,.14)}
+
+/* voyage route */
+.voyage{position:relative;display:flex;justify-content:space-between;align-items:center;height:40px;margin:4px 4px 20px}
+.voyage::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px dashed #C3CCDD}
+.voyage .fill{position:absolute;left:0;top:50%;height:4px;margin-top:-2px;background:var(--blue);border-radius:2px;transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.voyage .wp{position:relative;z-index:1;width:14px;height:14px;border-radius:50%;background:var(--bg);border:3px solid #C3CCDD;transition:all .3s}
+.voyage .wp.done{background:var(--blue);border-color:var(--blue)}
+.voyage .wp.now{width:38px;height:38px;border:0;background:var(--buoy);display:grid;place-items:center;box-shadow:0 0 0 7px rgba(255,201,60,.25);animation:bob 2.4s ease-in-out infinite}
+.voyage .wp.now svg{width:20px;height:20px}
+.voyage .wp.port{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:.85rem;background:var(--surface)}
+@keyframes bob{50%{transform:translateY(-4px) rotate(-4deg)}}
+
+/* livelier options */
+.opt{border-radius:18px;padding:16px 18px;box-shadow:0 2px 0 var(--line)}
+.options .opt{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}
+.options .opt:nth-child(2){animation-delay:.07s}.options .opt:nth-child(3){animation-delay:.14s}
+.opt.picked{box-shadow:0 12px 28px -12px rgba(47,107,255,.7)}
+.feedback{border-radius:24px;box-shadow:var(--lift)}
+
+/* results: score ring on a dark band */
+.result-head{background:var(--navy);border-radius:var(--r-lg);padding:24px;position:relative;overflow:hidden;isolation:isolate}
+.result-head h2{color:#fff}
+.result-head p{color:#D5DDEC}
+.result-head .result-kicker{color:var(--buoy)}
+.result-head::after{content:"";position:absolute;z-index:-1;width:260px;height:260px;border-radius:50%;background:var(--blue);opacity:.3;filter:blur(70px);right:-80px;top:-120px}
+.badge{width:118px;height:118px;border-radius:50%;position:relative;background:conic-gradient(var(--buoy) calc(var(--p,0) * 1%),rgba(255,255,255,.13) 0)}
+.badge::before{content:"";position:absolute;inset:11px;border-radius:50%;background:var(--navy)}
+.badge-big{position:relative;z-index:1;color:#fff;font-size:1.9rem}
+@media (max-width:520px){.result-head{grid-template-columns:1fr;text-align:left}.badge{width:96px;height:96px}}
+.rankname .emb{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:12px;background:var(--buoy);margin-right:10px;font-size:1.2rem;vertical-align:middle}
+.xp-pill{background:linear-gradient(135deg,var(--navy),#23407A)}
+.xp-pill.bump{box-shadow:0 0 0 5px rgba(255,201,60,.45)}
+
+.prog .short{display:none}
+.brand small{white-space:nowrap}
+@media (max-width:560px){.prog .long{display:none}.prog .short{display:inline}.topright{flex-wrap:nowrap}.brand small{display:none}}
+
+
+.mail{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--lift);padding:18px 20px;transform:rotate(1.5deg);animation:rise .6s ease .15s both}
+.mail-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.av{width:42px;height:42px;border-radius:50%;background:var(--buoy);color:var(--navy);display:grid;place-items:center;font-family:var(--display);font-weight:600;font-size:.85rem;flex:none}
+.mail-top b{display:block;color:var(--navy);line-height:1.2}
+.mail-top small{color:var(--muted);font-size:.8rem}
+.mail .subj{font-weight:700;color:var(--navy);margin-bottom:4px}
+.mail p{margin:0;font-size:.95rem}
+.unread{position:absolute;top:-10px;right:10px;z-index:2;background:var(--red);color:#fff;font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:999px;transform:rotate(1.5deg)}
+.ctx{background:var(--buoy-soft);border-left:5px solid var(--buoy);border-radius:0 var(--r-md) var(--r-md) 0;padding:14px 18px;margin:6px 0 4px}
+.ctx b{display:block;color:var(--navy);font-size:.85rem;margin-bottom:2px}
+
+</style>
+<style>.libback{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--navy);text-decoration:none;border-bottom:2px solid currentColor;padding-bottom:1px}.libback:hover{color:var(--blue)}.libback:focus-visible{outline:3px solid var(--buoy);outline-offset:3px}</style>
+</head>
+<body>
+<div class="shell">
+<header class="topbar">
+  <div class="brand"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#0E1F3D"/><circle cx="16" cy="11" r="4" fill="#FFC93C"/><path d="M5 20c3.7 0 3.7-3 7.3-3s3.7 3 7.4 3 3.6-3 7.3-3" stroke="#7FD6C2" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M5 25.5c3.7 0 3.7-3 7.3-3s3.7 3 7.4 3 3.6-3 7.3-3" stroke="#2F6BFF" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg><div><b>Harbourline</b><small>Leadership Academy</small></div></div>
+  <div class="topright"><span class="prog"><span class="long">AI Ready Leaders: module 1 of 4</span><span class="short">Module 1/4</span></span><span class="xp-pill hidden" id="xpPill" aria-live="polite">⚓ <span>0</span> XP</span></div>
+</header>
+<section id="intro">
+  <div class="hero-band"><span class="glow a"></span><span class="glow b"></span><svg class="waves" viewBox="0 0 1200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40 C150 10 300 70 450 40 S750 10 900 40 S1100 70 1200 40 V80 H0Z" fill="#2F6BFF" opacity=".35"/><path d="M0 55 C200 30 350 80 550 55 S850 30 1000 55 S1150 75 1200 55 V80 H0Z" fill="#7FD6C2" opacity=".35"/></svg>
+  <div class="hero">
+    <div>
+      <div class="tags"><span class="tag lead">Leading at Scale</span><span class="tag">Module 1</span><span class="tag">Branching scenario</span><span class="tag">4 minutes</span></div>
+      <h1>Leading the AI Shift</h1>
+      <p class="subtitle">Making the case, bringing people with you and governing the risk</p>
+      <p class="lede"><strong>Scenario: the pilot decision.</strong> You lead Harbourline's 40-person customer support team. Your people are experienced, loyal and a little tired after a long claims season. Then the COO emails.</p>
+    </div>
+    <div class="hero-visual"><span class="unread">New</span>
+<div class="mail">
+  <div class="mail-top"><span class="av">MK</span><div><b>Maya Kerr, COO</b><small>Today, 7:42am</small></div></div>
+  <div class="subj">Quick one on support costs</div>
+  <p>Saw a vendor demo of an AI support agent yesterday. Impressive. Can we take 30% out of support costs by Q3? Keen to hear your thinking.</p>
+</div></div>
+  </div>
+  </div>
+  <div class="briefing">
+    <div class="panel howto"><h3><span class="hi">🗺️</span>How this works</h3><ol><li><span>Read the situation and Maya's email.</span></li><li><span>Make three decisions. Choose what you would actually do, not the textbook answer.</span></li><li><span>After each choice, see what happens next and how your value, trust and risk scores move.</span></li><li><span>Finish with your leadership profile, XP, rank and badges. Replay to try a different path.</span></li></ol><p class="tip"><strong>Tip.</strong> Press A, B or C on your keyboard to choose. There's no time limit, so take a moment with each decision.</p></div>
+    <div class="panel"><h3><span class="hi">🏆</span>What you can earn</h3><p class="muted" style="font-size:.92rem;margin-bottom:0">Strong leadership calls earn XP. Climb four ranks and unlock 4 badges.</p>
+      <div class="ranks"><span>🪢 Deckhand</span><span>🧭 Navigator</span><span>🔭 First mate</span><span>⚓ Captain</span></div>
+      <div class="badges"><div class="bdg locked"><span class="ic">🧭</span><div><b>Reframer</b><small>Turned a cost target into a value case</small></div></div><div class="bdg locked"><span class="ic">🗣️</span><div><b>Open book</b><small>Brought your team in early and honestly</small></div></div><div class="bdg locked"><span class="ic">🛟</span><div><b>Safe hands</b><small>Handled an AI error with candour</small></div></div><div class="bdg locked"><span class="ic">⚓</span><div><b>Steward</b><small>Finished with the steward profile</small></div></div></div></div>
+  </div>
+  <div class="startrow"><button class="btn" id="start">Start module 1</button><span class="muted">About 4 minutes. Works on phone or laptop.</span></div>
+</section>
+
+<section id="stage" class="hidden">
+  <div class="hud" id="hud" style="--n:3">
+    <div class="mini" data-k="V"><label><span>Business value</span><span class="val">50</span></label><div class="track"><i></i></div></div>
+    <div class="mini" data-k="T"><label><span>Team trust</span><span class="val">50</span></label><div class="track"><i></i></div></div>
+    <div class="mini" data-k="R"><label><span>Risk control</span><span class="val">50</span></label><div class="track"><i></i></div></div>
+  </div>
+  <div id="rail"></div>
+  <div class="step-label" id="stepLabel"></div>
+  <h2 id="q"></h2>
+  <div id="ctx"></div>
+  <div class="options" id="opts"></div>
+  <div id="fb"></div>
+</section>
+
+<section id="end" class="hidden">
+  <div class="result-head">
+    <div class="badge"><span class="badge-big" id="total"></span></div>
+    <div><div class="result-kicker">Module 1 complete. Your leadership profile:</div><h2 id="profile" style="margin-bottom:6px"></h2><p id="profileText" style="margin:0"></p></div>
+  </div>
+  <div class="meters">
+    <div class="meter"><label><span>Business value</span><span id="vV"></span></label><div class="track"><i id="bV"></i></div></div>
+    <div class="meter"><label><span>Team trust</span><span id="vT"></span></label><div class="track"><i id="bT" style="background:var(--glass)"></i></div></div>
+    <div class="meter"><label><span>Risk control</span><span id="vR"></span></label><div class="track"><i id="bR" style="background:var(--buoy)"></i></div></div>
+  </div>
+  <div class="game">
+  <div class="game-top">
+    <div><div class="result-kicker">XP earned</div><div class="xpbig" id="gXP">0</div></div>
+    <div><div class="result-kicker">Your rank</div><div class="rankname" id="gRank"></div><div class="track"><i id="gRankBar"></i></div><small id="gNext"></small></div>
+  </div>
+  <h3>Badges <span class="note" id="gCount" style="font-family:var(--body);font-weight:600"></span></h3>
+  <div class="badges" id="gBadges"></div>
+  <h3>Your AI Ready Leaders passport</h3>
+  <div class="passport" id="gPass"></div>
+  <div class="note">Progress is saved in this browser on this device.</div>
+</div>
+  <div class="panel">
+    <h3>What effective AI leaders tend to do</h3>
+    <ol>
+      <li>Reframe the question from "how much can we cut?" to "where does AI create value, and what will it take?"</li>
+      <li>Bring people in early. Uncertainty told honestly beats silence or promises you can't keep.</li>
+      <li>Treat AI mistakes as a governance test: fix the customer impact first, then put a human where the stakes are high.</li>
+    </ol>
+  </div>
+  <div class="actions"><button class="btn ghost" id="again">Replay for more XP</button></div>
+</section>
+
+<footer class="foot"><a class="libback" href="../index.html">Back to all modules</a><span>Harbourline Leadership Academy, AI Ready Leaders programme</span><span>Practice scenario. People and events are fictional.</span></footer>
+</div>
+<script>
+const CFG={"module": 1, "maxXP": 195, "badges": [{"id": "reframer", "icon": "🧭", "name": "Reframer", "desc": "Turned a cost target into a value case"}, {"id": "openbook", "icon": "🗣️", "name": "Open book", "desc": "Brought your team in early and honestly"}, {"id": "safehands", "icon": "🛟", "name": "Safe hands", "desc": "Handled an AI error with candour"}, {"id": "steward", "icon": "⚓", "name": "Steward", "desc": "Finished with the steward profile"}], "modules": [{"n": 1, "name": "Leading the AI Shift"}, {"n": 2, "name": "The Delegation Edge"}, {"n": 3, "name": "Conversations That Count"}, {"n": 4, "name": "Trust, But Verify"}]};
+const $=id=>document.getElementById(id);
+const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
+function countUp(el,to,suffix="",max){const ring=max?el.parentElement:null;
+  if(RM){el.textContent=to+suffix;if(ring)ring.style.setProperty("--p",to/max*100);return;}
+  const t0=performance.now(),d=1100;(function f(t){const p=Math.min(1,(t-t0)/d),e=1-Math.pow(1-p,3);
+    el.textContent=Math.round(to*e)+suffix;if(ring)ring.style.setProperty("--p",to/max*100*e);if(p<1)requestAnimationFrame(f);})(t0);}
+const BOAT='<svg viewBox="0 0 24 24" fill="none" stroke="#0E1F3D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16h18l-2.5 4.5h-13z"/><path d="M12 3v12"/><path d="M12 4l6.5 9.5H12"/></svg>';
+function setVoyage(el,i,total){el.className="voyage";el.setAttribute("aria-label",`Step ${i+1} of ${total}`);
+  let h=`<span class="fill" style="width:${i/total*100}%"></span>`;
+  for(let n=0;n<total;n++)h+=`<span class="wp ${n<i?"done":n===i?"now":""}">${n===i?BOAT:""}</span>`;
+  el.innerHTML=h+'<span class="wp port" aria-hidden="true">⚓</span>';}
+function focusEl(el){el.setAttribute("tabindex","-1");el.focus({preventScroll:true});el.scrollIntoView({behavior:RM?"auto":"smooth",block:"start"});}
+/* ===== gamification ===== */
+const G={xp:0,earned:new Set(),pending:[]};
+const STORE="harbourline-ai-ready-v1";
+const RANK_ICONS=["🪢","🧭","🔭","⚓"];
+const RANKS=[["Deckhand",0],["Navigator",.4],["First mate",.7],["Captain",.9]];
+function loadP(){try{return JSON.parse(localStorage.getItem(STORE))||{}}catch(e){return{}}}
+function saveP(d){try{localStorage.setItem(STORE,JSON.stringify(d))}catch(e){}}
+function xpPill(){const p=$("xpPill");p.classList.remove("hidden");p.querySelector("span").textContent=G.xp;p.classList.add("bump");setTimeout(()=>p.classList.remove("bump"),220);}
+function addXP(n,anchor){
+  G.xp=Math.max(0,G.xp+n);xpPill();
+  if(anchor&&!RM){const r=anchor.getBoundingClientRect(),f=document.createElement("span");
+    f.className="xpfloat";f.textContent=(n>=0?"+":"")+n+" XP";if(n<0)f.style.color="var(--red)";
+    f.style.left=(r.left+scrollX+r.width/2-34)+"px";f.style.top=(r.top+scrollY-8)+"px";
+    document.body.appendChild(f);setTimeout(()=>f.remove(),1300);}
+}
+function unlock(id){if(G.earned.has(id))return;G.earned.add(id);G.pending.push(id);}
+function flushUnlocks(){const h=G.pending.map(id=>{const b=CFG.badges.find(x=>x.id===id);
+  return `<div class="unlock" role="status"><span class="ic">${b.icon}</span><div><small>Badge unlocked</small><b>${b.name}</b></div></div>`;}).join("");G.pending=[];return h;}
+function rankOf(xp){const p=xp/CFG.maxXP;let r=0;RANKS.forEach((x,k)=>{if(p>=x[1]-1e-9)r=k;});return r;}
+function finishGame(){
+  G.pending=[];
+  const d=loadP(),prev=d[CFG.module]||{xp:0,badges:[]};
+  const before=new Set(prev.badges);
+  d[CFG.module]={xp:Math.max(prev.xp,G.xp),badges:[...new Set([...prev.badges,...G.earned])]};saveP(d);
+  countUp($("gXP"),G.xp);
+  const r=rankOf(G.xp);$("gRank").innerHTML=`<span class="emb">${RANK_ICONS[r]}</span>${RANKS[r][0]}`;
+  setTimeout(()=>$("gRankBar").style.width=Math.min(100,Math.round(G.xp/CFG.maxXP*100))+"%",250);
+  $("gNext").textContent=r<3?`${Math.ceil(RANKS[r+1][1]*CFG.maxXP)-G.xp} XP to ${RANKS[r+1][0]}. Replay to climb the ranks.`:`Top rank. Best possible score is ${CFG.maxXP} XP.`;
+  $("gBadges").innerHTML=CFG.badges.map(b=>{const st=G.earned.has(b.id)?"new":before.has(b.id)?"":"locked";
+    return `<div class="bdg ${st}"><span class="ic">${b.icon}</span><div><b>${b.name}</b><small>${b.desc}</small></div></div>`;}).join("");
+  $("gCount").textContent=`${d[CFG.module].badges.length} of ${CFG.badges.length} collected`;
+  $("gPass").innerHTML=CFG.modules.map(m=>{const done=!!d[m.n];
+    return `<div class="stamp ${done?"done":""} ${m.n===CFG.module?"here":""}"><b>${done?"✓ ":""}Module ${m.n}</b>${m.name}</div>`;}).join("");
+  confetti();
+}
+function resetGame(){G.xp=0;G.earned=new Set();G.pending=[];xpPill();}
+function confetti(){
+  if(RM)return;const c=document.createElement("canvas");c.id="confetti";document.body.appendChild(c);
+  const x=c.getContext("2d"),W=c.width=innerWidth,H=c.height=innerHeight,cols=["#2F6BFF","#FFC93C","#7FD6C2","#0E1F3D","#E2574C"];
+  const ps=Array.from({length:150},()=>({x:W/2+(Math.random()-.5)*W*.3,y:H*.25,vx:(Math.random()-.5)*12,vy:-Math.random()*11-3,s:Math.random()*7+4,r:Math.random()*6,vr:(Math.random()-.5)*.3,c:cols[Math.random()*cols.length|0]}));
+  const t0=performance.now();
+  (function f(t){x.clearRect(0,0,W,H);ps.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.vx*=.99;p.r+=p.vr;
+    x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);x.restore();});
+    if(t-t0<2800)requestAnimationFrame(f);else c.remove();})(t0);
+}
+
+
+const steps=[
+ {q:"How do you reply to Maya?",ctx:"",opts:[
+  {t:"Reply with enthusiasm and book the vendor for next week. Momentum matters.",d:{V:1,T:-1,R:-1},h:"Fast, but noisy",
+   c:"Maya is pleased. By Thursday a garbled version of the plan reaches your team via the vendor's sales rep. Two of your most senior agents quietly update their LinkedIn profiles."},
+  {t:"Ask for two weeks to come back with where AI would genuinely help, the risks, and what a pilot would cost.",d:{V:2,T:1,R:1},h:"You reframed the brief",b:"reframer",
+   c:"Maya agrees, a little impatient. You've moved the conversation from a cost target to a value case, and bought room to involve the people who know the work best."},
+  {t:"Push back firmly. Harbourline's customers want people, not bots.",d:{V:-1,T:1,R:0},h:"Principled, but sidelined",
+   c:"Your team would cheer if they knew. Maya doesn't argue. She asks the Head of Digital to run the pilot instead, and you'll now deliver someone else's plan."}]},
+ {q:"Word is spreading. What do you tell your team?",ctx:"",opts:[
+  {t:"Nothing yet. No point worrying people until it's decided.",d:{V:0,T:-2,R:-1},h:"Silence gets filled",
+   c:"The rumour mill fills the gap. Team leaders field questions they can't answer, and sick days tick up the following month."},
+  {t:"Run a team session: share what's being explored and what isn't decided, and ask agents to map the most repetitive parts of their day.",d:{V:1,T:2,R:1},h:"Your team is now in it with you",b:"openbook",
+   c:"An uncomfortable hour, but honest. The mapping surfaces something the vendor missed: 40% of contacts are about the same three policy questions. Your agents now have a stake in the design."},
+  {t:"Reassure everyone that no jobs will change. You want them focused, not anxious.",d:{V:0,T:1,R:-2},h:"A promise you don't control",
+   c:"Relief in the room. But if roles do shift later, the trust you've gained today will cost you double."}]},
+ {q:"Week one of the pilot. Then this lands.",ctx:'<div class="ctx"><b>Pilot report, Friday</b>The AI agent resolved 62% of simple queries end to end and satisfaction is steady. But it gave three customers a wrong answer about a flood exclusion in their policy.</div>',opts:[
+  {t:"Pause the whole pilot and roll back. One wrong coverage answer is one too many.",d:{V:-1,T:0,R:1},h:"Safe, but the lesson is lost",
+   c:"Harbourline learns that AI is 'too risky' rather than how to govern it. Maya starts asking whether you're the right person to lead this."},
+  {t:"Keep going. Three errors is within tolerance. Get the vendor to tweak the prompts quietly.",d:{V:1,T:-1,R:-2},h:"The risk comes due",
+   c:"The numbers look good for a fortnight. Then one of the three customers makes a claim, is refused, and complains to the ombudsman with the chatbot transcript attached."},
+  {t:"Contact the three customers today, route all coverage questions to a person, and report the numbers openly to Maya.",d:{V:1,T:1,R:2},h:"Governance done well",b:"safehands",
+   c:"Maya respects the candour. The pilot continues with a clear line: AI handles routine queries, people handle anything touching a customer's cover. That line becomes Harbourline's template."}]}
+];
+let i=0,score={V:0,T:0,R:0};
+const lbl={V:"Value",T:"Trust",R:"Risk control"};
+const pct=v=>Math.max(0,Math.min(100,Math.round(50+v*50/6)));
+function hud(ch){document.querySelectorAll("#hud .mini").forEach(m=>{const k=m.dataset.k,p=pct(score[k]);
+  m.querySelector("i").style.width=p+"%";m.querySelector(".val").textContent=p;
+  if(ch&&ch[k]){m.classList.add("pulse");setTimeout(()=>m.classList.remove("pulse"),900);}});}
+function render(){
+  const s=steps[i];
+  setVoyage($("rail"),i,steps.length);
+  $("stepLabel").textContent=`Decision ${i+1} of ${steps.length}`;
+  $("q").textContent=s.q;$("ctx").innerHTML=s.ctx;$("fb").innerHTML="";$("opts").innerHTML="";
+  s.opts.forEach((o,n)=>{const b=document.createElement("button");b.className="opt";
+    b.innerHTML=`<span class="key">${"ABC"[n]}</span><span>${o.t}</span>`;b.onclick=()=>choose(o,b);$("opts").appendChild(b);});
+  focusEl($("stepLabel"));
+}
+function choose(o,btn){
+  document.querySelectorAll(".opt").forEach(b=>b.disabled=true);btn.classList.add("picked");
+  for(const k in o.d)score[k]+=o.d[k];hud(o.d);
+  const sum=Object.values(o.d).reduce((a,b)=>a+b,0),xp=Math.max(10,25+10*sum);
+  addXP(xp,btn); if(o.b)unlock(o.b);
+  const chips=`<span class="chip xp">+${xp} XP</span>`+Object.entries(o.d).filter(([,v])=>v).map(([k,v])=>`<span class="chip ${v>0?"up":"down"}">${lbl[k]} ${v>0?"+":""}${v}</span>`).join("");
+  $("fb").innerHTML=`<div class="feedback">${flushUnlocks()}<div class="chips">${chips}</div><h3>${o.h}</h3><p>${o.c}</p><button class="btn alt" id="next">${i<steps.length-1?"Next decision":"See your results"}</button></div>`;
+  $("next").onclick=()=>{i++;i<steps.length?render():finish();};$("next").focus();
+}
+document.addEventListener("keydown",e=>{const n="abc123".indexOf(e.key.toLowerCase());if(n<0||$("stage").classList.contains("hidden"))return;
+  const b=[...document.querySelectorAll(".opt")][n%3];if(b&&!b.disabled)b.click();});
+function finish(){
+  $("stage").classList.add("hidden");$("end").classList.remove("hidden");
+  const t=score.V+score.T+score.R;let p,x;
+  if(t>=10){p="The steward";unlock("steward");x="You balanced ambition with care: reframed the brief, brought people with you and governed the risk without killing the opportunity."}
+  else if(score.V>=score.T&&score.V>=score.R&&t>=2){p="The accelerator";x="You kept momentum, which senior stakeholders value. Watch out: speed bought with trust or controls is repaid later, with interest."}
+  else if(score.R>=score.V&&t>=0){p="The guardian";x="You protected customers and Harbourline. Watch out: caution without a value story can leave you sidelined while someone else leads the change."}
+  else{p="The bystander";x="This path let events lead you. That's common with unfamiliar technology, and every decision here is a learnable skill."}
+  $("profile").textContent=p;$("profileText").textContent=x;
+  countUp($("total"),Math.round((pct(score.V)+pct(score.T)+pct(score.R))/3),"",100);
+  [["V","bV","vV"],["T","bT","vT"],["R","bR","vR"]].forEach(([k,b,v])=>{$(v).textContent=pct(score[k])+"%";setTimeout(()=>$(b).style.width=pct(score[k])+"%",200);});
+  finishGame();focusEl($("end"));
+}
+$("start").onclick=()=>{$("intro").classList.add("hidden");$("stage").classList.remove("hidden");resetGame();hud();render();};
+$("again").onclick=()=>{i=0;score={V:0,T:0,R:0};["bV","bT","bR","gRankBar"].forEach(b=>$(b).style.width=0);resetGame();$("end").classList.add("hidden");$("stage").classList.remove("hidden");hud();render();};
+
+</script>
+</body>
+</html>
